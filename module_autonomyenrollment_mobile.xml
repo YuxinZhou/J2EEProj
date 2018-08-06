@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_autonomyenrollment_mobile" default="compile.module.autonomyenrollment_mobile">
+  <dirname property="module.autonomyenrollment_mobile.basedir" file="${ant.file.module_autonomyenrollment_mobile}"/>
+  
+  <property name="module.jdk.home.autonomyenrollment_mobile" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.autonomyenrollment_mobile" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.autonomyenrollment_mobile" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.autonomyenrollment_mobile" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="autonomyenrollment_mobile.output.dir" value="${module.autonomyenrollment_mobile.basedir}/web/WEB-INF/classes"/>
+  <property name="autonomyenrollment_mobile.testoutput.dir" value="${module.autonomyenrollment_mobile.basedir}/web/WEB-INF/classes"/>
+  
+  <path id="autonomyenrollment_mobile.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="autonomyenrollment_mobile.module.production.classpath">
+    <path refid="${module.jdk.classpath.autonomyenrollment_mobile}"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/servlet-api.jar"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/jsp-api.jar"/>
+    <fileset dir="${basedir}/web/WEB-INF/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="autonomyenrollment_mobile.runtime.production.module.classpath">
+    <pathelement location="${autonomyenrollment_mobile.output.dir}"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/servlet-api.jar"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/jsp-api.jar"/>
+    <fileset dir="${basedir}/web/WEB-INF/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="autonomyenrollment_mobile.module.classpath">
+    <path refid="${module.jdk.classpath.autonomyenrollment_mobile}"/>
+    <pathelement location="${autonomyenrollment_mobile.output.dir}"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/servlet-api.jar"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/jsp-api.jar"/>
+    <fileset dir="${basedir}/web/WEB-INF/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="autonomyenrollment_mobile.runtime.module.classpath">
+    <pathelement location="${autonomyenrollment_mobile.output.dir}"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/servlet-api.jar"/>
+    <pathelement location="${basedir}/../../Tools/apache-tomcat-9.0.0.M3-deployer/lib/jsp-api.jar"/>
+    <fileset dir="${basedir}/web/WEB-INF/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.autonomyenrollment_mobile">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.autonomyenrollment_mobile">
+    <patternset refid="excluded.from.module.autonomyenrollment_mobile"/>
+  </patternset>
+  
+  <path id="autonomyenrollment_mobile.module.sourcepath">
+    <dirset dir="${module.autonomyenrollment_mobile.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.autonomyenrollment_mobile" depends="compile.module.autonomyenrollment_mobile.production,compile.module.autonomyenrollment_mobile.tests" description="Compile module AutonomyEnrollment_Mobile"/>
+  
+  <target name="compile.module.autonomyenrollment_mobile.production" depends="register.custom.compilers" description="Compile module AutonomyEnrollment_Mobile; production classes">
+    <mkdir dir="${autonomyenrollment_mobile.output.dir}"/>
+    <javac2 destdir="${autonomyenrollment_mobile.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.autonomyenrollment_mobile}/javac">
+      <compilerarg line="${compiler.args.autonomyenrollment_mobile}"/>
+      <bootclasspath refid="autonomyenrollment_mobile.module.bootclasspath"/>
+      <classpath refid="autonomyenrollment_mobile.module.production.classpath"/>
+      <src refid="autonomyenrollment_mobile.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.autonomyenrollment_mobile"/>
+    </javac2>
+    
+    <copy todir="${autonomyenrollment_mobile.output.dir}">
+      <fileset dir="${module.autonomyenrollment_mobile.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.autonomyenrollment_mobile.tests" depends="register.custom.compilers,compile.module.autonomyenrollment_mobile.production" description="compile module AutonomyEnrollment_Mobile; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.autonomyenrollment_mobile" description="cleanup module">
+    <delete dir="${autonomyenrollment_mobile.output.dir}"/>
+    <delete dir="${autonomyenrollment_mobile.testoutput.dir}"/>
+  </target>
+</project>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>自主招生-复试</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="../lib/bootstrap.min.css">
+	<link rel="stylesheet" href="../lib/bootstrap-table/bootstrap-table.min.css">
+
+	<style>
+
+		.container-fluid{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: url("./images/studentBg.jpeg") 0 0 no-repeat;
+			background-size: cover;
+			font-family: "Microsoft YaHei UI";
+		}
+		header{
+			text-align: center;
+		}
+		.content{
+			width:100%;
+		}
+		.panel{
+			width:100%;
+		}
+		.title{
+
+			font-size: 20px;
+			display: inline-block;
+			margin-right: 20px;
+		}
+		.content{
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+
+<div class="container-fluid">
+
+	<header><h3>当前考生考号：<span id="student-id">100</span></h3></header>
+	<div class="content">
+		<div class="panel panel-default english">
+			<div class="panel-heading std-type">英语</div> <!--std-type-**-->
+			<div class="panel-body">
+<!--				<div class="title std-name">流利程度</div> &lt;!&ndash;std-name&ndash;&gt;
+				<div class="content">
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="50">&lt;!&ndash;std-type-name-value&ndash;&gt;
+						优
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="40">
+						良
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="30">
+						差
+					</label>
+				</div>
+				<hr/>-->
+			</div>
+		</div>
+		<div class="panel panel-default major">
+			<div class="panel-heading std-type">专业</div> <!--std-type-->
+			<div class="panel-body">
+			<!--	<div class="title std-name">正确程度</div> &lt;!&ndash;std-name&ndash;&gt;
+				<div class="content">
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="50">&lt;!&ndash;std-type-name-value&ndash;&gt;
+						优
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="40">
+						良
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="30">
+						差
+					</label>
+				</div>-->
+			</div>
+		</div>
+		<div class="panel panel-default humanity">
+			<div class="panel-heading std-type">人文</div> <!--std-type-->
+			<div class="panel-body">
+			<!--	<div class="title std-name">正确程度</div> &lt;!&ndash;std-name&ndash;&gt;
+				<div class="content">
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="50">&lt;!&ndash;std-type-name-value&ndash;&gt;
+						优
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="40">
+						良
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="std-type-name-value" value="30">
+						差
+					</label>
+				</div>-->
+			</div>
+		</div>
+
+
+	</div>
+	<br/>
+	<button class="btn btn-primary" id="next-student">下一个考生</button>
+	<button class="btn btn-default" id="back-to-admin">返回设置</button>
+	<!--modal-->
+	<div class="modal" id="mymodal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span
+							aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="modal-ok" data-dismiss="modal">确认</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+</div>
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-filter-control.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="../lib/bootstrap-editable.js"></script>
+<script src="./build/lastScore.bundle.js"></script>
+</body>
+</html>

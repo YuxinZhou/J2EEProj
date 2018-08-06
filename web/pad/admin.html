@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>管理员管理页面</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="../lib/bootstrap.min.css">
+	<link rel="stylesheet" href="../lib/bootstrapValidator.min.css"/>
+	<link rel="stylesheet" href="../lib/bootstrap-table/bootstrap-table.min.css">
+	<style>
+		body {
+		}
+
+		.container-fluid {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			font-family: "Microsoft YaHei UI";
+		}
+
+		.c1 {
+			position: relative;
+			top: 10%;
+		}
+
+	</style>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="c1">
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">初试分数条件限制</h3>
+			</div>
+			<div class="panel-body">
+				<form id="admin" class="form-group">
+					<div class="col-sm-12" style="padding: 0;">
+						<input type="text" class="form-control" name="scoreMin" id="scoreMin" required
+						       placeholder="最小值"
+						       pattern="^[0-9]+$" data-bv-regexp-message="只能是数字"/>
+					</div>
+					<div class="col-sm-12" style="padding: 0;">
+						<input type="text" class="form-control" name="scoreMax" id="scoreMax" required
+						       placeholder="最大值"
+						       pattern="^[0-9]+$" data-bv-regexp-message="只能是数字"/>
+					</div>
+
+					<div class="col-sm-12" style="padding: 0;">
+						<input type="text" class="form-control" name="scoreDifference" id="scoreDifference" required
+						       placeholder="分数最大差值"
+						       pattern="^[0-9]+$" data-bv-regexp-message="只能是数字"/>
+					</div>
+
+
+					<!--错误信息-->
+					<div class="form-group">
+						<div class="error alert alert-danger hide" role="alert"></div>
+					</div>
+					<!--设置完成按键-->
+					<button type="submit" class="btn btn-primary">设置完成</button>
+
+				</form>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">进入复试
+				</h3>
+			</div>
+			<div class="panel-body">
+				<button class="pull-left btn btn-primary" id="enter-last">进入复试</button>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">管理分数
+				</h3>
+			</div>
+			<div class="panel-body">
+				<table id="table"
+				       data-url=""
+				       data-search="true"
+				       data-toggle="table"
+				       data-show-export="false"
+				       data-pagination="true"
+				       data-show-columns="false"
+				       data-detail-view="false"
+				       data-click-to-select="false"
+				       data-unique-id="id"
+				       data-filter-control="true">
+					<thead>
+					<tr><!--
+						<th data-field="state"
+						    data-checkbox="true">
+						</th>-->
+						<th data-field="id">考号/作品号
+						</th>
+						<th data-field="firstGrade">印象分
+						</th>
+						<th data-field="finalGrade">最终分
+						</th>
+						<th data-field="lastGrade">复试分数
+						</th>
+						<th data-field="isUpload"
+						    data-formatter="uploadFormatter"
+						    data-events="uploadEvent"
+						    data-filter-control="select">是否上传
+						</th>
+					</tr>
+					</thead>
+				</table>
+
+				<button id="btn-upload-all" class="pull-left btn-primary btn">上传所有分数</button>
+				<button id="btn-clear-all" class="pull-left btn-default btn">删除本地分数</button>
+			</div>
+		</div>
+
+		<!--modal-->
+		<div class="modal" id="mymodal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+					<!--	<button type="button" class="close" data-dismiss="modal"><span
+								aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+-->						<h4 class="modal-title">提示</h4>
+					</div>
+					<div class="modal-body">
+						<p></p>
+					</div>
+					<div class="modal-footer">
+<!--
+						<button type="button" class="btn btn-default" id="modal-cancel" data-dismiss="modal">取消</button>
+-->
+						<button type="button" class="btn btn-primary" id="modal-ok" data-dismiss="modal">确认</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+	</div>
+</div>
+
+
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/bootstrapValidator.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-filter-control.min.js"></script>
+<script src="./build/admin.bundle.js"></script>
+<script>
+
+	var examData = window.localStorage.exam ? JSON.parse(window.localStorage.exam) : {};
+	var requestPath = window.config.requestPath;
+	var $table = $('#table');
+
+	function uploadFormatter(value) {
+		return value ? '<button class="btn uploaded" disabled>已上传/true</button>' :
+				'<button class="btn btn-primary not-upload">未上传/false</button>';
+	}
+	$('#btn-upload-all').click(function () {
+		$(this).attr('disabled', 'disabled');
+
+		var uploadArr = getNotUpload();
+		$('.modal-body p').html('上传中');
+		$('#mymodal').modal('toggle');
+		$.ajax({
+			type: 'post',
+			url: requestPath + 'pad/uploadAllGrade',
+			data: JSON.stringify(getNotUpload()),
+			success: function () {
+				$('#mymodal').modal('toggle');
+				for (var i = 0; i < uploadArr.length; i++) {
+					//修改本地数据
+					setExam(uploadArr[i].id, {
+						"isUpload": true
+					});
+					//更新table
+					$table.bootstrapTable('updateByUniqueId', {
+						id: uploadArr[i].id,
+						row: {
+							"firstGrade": uploadArr[i].firstGrade,
+							"finalGrade": uploadArr[i].finalGrade,
+							"lastGrade": uploadArr[i].lastGrade,
+							"isUpload": true
+						}
+					})
+				}
+				window.localStorage.exam = JSON.stringify(examData);
+			},
+			error: function () {
+				$('.modal-body p').html('上传失败，请稍后再试');
+				$(this).attr('disabled', false);
+			}
+		})
+	});
+	$('#btn-clear-all').click(function () {
+		//todo:应该先询问一下
+		//删除本地数据
+		window.localStorage.removeItem('exam');
+		//清空table
+		$table.bootstrapTable('removeAll');
+	});
+	window.uploadEvent = {
+		'click .not-upload': function (e, value, row, index) {
+			$(e.target).attr('disabled', true);//disable button
+
+			$('.modal-body p').html('上传中');
+			$("#mymodal").modal("toggle");
+
+			//获取所需数据
+			var uploadScore = {
+				"examNumber": row.id,
+				"subject": examData.subject,
+				"firstGrade": row.firstGrade,
+				"finalGrade": row.finalGrade,
+				"lastGrade": row.lastGrade,
+				"expertId": examData.expertId,
+				"uploadTime": new Date()
+			};
+			$.ajax({
+				type: 'post',
+				url: requestPath + 'pad/uploadAllGrade',
+				data: JSON.stringify(uploadScore),
+				success: function (res) {
+					if (res.error_code == 2000) {
+						$('.modal-body p').html('上传成功');
+						//修改本地数据
+						setExam(row.id, {
+							"isUpload": true
+						});
+						//修改表格
+						row.isUpload = true;
+						$('#table').bootstrapTable('updateRow', {
+							index: index,
+							row: row
+						});
+					}
+				},
+				error: function () {
+					$('.modal-body p').html('上传失败');
+				}
+			})
+
+
+		},
+		'click .uploaded': function (e, value, row) {
+			return;
+		}
+	}
+
+	function setExam(id, option) {
+		examData.students.forEach(function (item) {
+			if (item.id == id) {
+				for (var i in option) {
+					item[i] = option[i];
+				}
+				return;
+			}
+		})
+	}
+//	function getExam(id, option) {
+//		var value;
+//		examData.students.forEach(function (item) {
+//			if (item.id == id) {
+//				value = item[option];
+//				return;
+//			}
+//		});
+//		return value;
+//	}
+	function getNotUpload() {
+		var arr = [];
+		var stus = examData.students;
+		for (var i = 0; i < stus.length; i++) {
+			if (!stus[i].isUpload) {//未上传
+				arr.push({
+					"examId": examData.examId,
+					"examNumber": stus[i].examNumber,
+					"subject": examData.subject,
+					"firstGrade": stus[i].firstGrade,
+					"finalGrade": stus[i].finalGrade,
+					"lastGrade": row.lastGrade,
+					"expertId": examData.expertId,
+					"uploadTime": new Date()
+				});
+			}
+		}
+		return arr;
+
+	}
+</script>
+</body>
+</html>

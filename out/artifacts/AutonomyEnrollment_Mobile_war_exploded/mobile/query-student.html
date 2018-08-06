@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>自主招生</title>
+	<link rel="stylesheet" href="../lib/bootstrap.min.css">
+	<link rel="stylesheet" href="../lib/bootstrap-table/bootstrap-table.css">
+	<style>
+
+	</style>
+</head>
+<body>
+<div class="container">
+	<div class="header" style="margin-top: 10px;">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				   aria-expanded="false">
+					学生报名 <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li role="presentation"><a href="./personal-enroll.html">个人报名</a></li>
+					<li role="presentation"><a href="./group-enroll.html">集体报名</a></li>
+				</ul>
+			</li>
+			<li role="presentation"><a href="./confirm.html">现场确认</a></li>
+			<li role="presentation" class="dropdown active">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				   aria-expanded="false">
+					信息查询 <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li role="presentation" class="active"><a href="javascript:;">学生信息</a></li>
+					<li role="presentation"><a href="./query-expert.html">专家信息</a></li>
+					<li role="presentation"><a href="./query-grade.html">成绩信息</a></li>
+				</ul>
+			</li>
+			<li role="presentation"><a href="./password.html">专家密码</a></li>
+		</ul>
+	</div>
+	<div class="content" style="margin-top: 20px">
+		<h1>学生信息
+			<button class="btn btn-primary upload-all-enroll">上传所有报名信息</button>
+		</h1>
+		<table id="table"
+		       data-url="./data/student.json"
+		       data-search="true"
+		       data-toggle="table"
+		       data-show-export="true"
+		       data-pagination="true"
+		       data-show-columns="true"
+		       data-detail-view="true"
+		       data-detail-formatter="detailFormatter"
+		       data-click-to-select="false"
+		       data-filter-control="true">
+			<thead>
+			<tr>
+				<!--		<th data-field="state"
+							data-checkbox="true"></th>-->
+				<th data-field="personalId"
+				    data-switchable="false">身份证
+				</th>
+				<th data-field="name"
+				    data-switchable="false">姓名
+				</th>
+				<th data-field="ticket"
+				    data-switchable="false"
+				    data-filter-control="input">准考证
+				</th>
+				<th data-field="examType"
+				    data-switchable="false"
+				    data-filter-control="select">专业（报考类型）
+				</th>
+				<th data-field="subject"
+				    data-switchable="false"
+				    data-filter-control="select">科目
+				</th>
+				<th data-field="gender"
+				    data-visible="false">性别
+				</th>
+				<th data-field="age"
+				    data-visible="false">年龄
+				</th>
+				<th data-field="province"
+				    data-visible="false">生源省
+				</th>
+				<th data-field="region"
+				    data-visible="false">生源市
+				</th>
+				<th data-field="highSchool"
+				    data-visible="false">毕业高中
+				</th>
+				<th data-field="telephone"
+				    data-visible="false">电话号码
+				</th>
+				<th data-field="email"
+				    data-visible="false">电子邮件
+				</th>
+				<th data-field="address"
+				    data-visible="false">地址
+				</th>
+				<th data-field="hasVerified"
+				    data-switchable="false"
+				    data-formatter="verifiedFormatter"
+				    data-events="verifiedEvent"
+				    data-filter-control="select">是否审核
+				</th>
+				<th data-field="hasConfirmed"
+				    data-switchable="false"
+				    data-formatter="confirmFormatter"
+				    data-events="confirmEvent"
+				    data-filter-control="select">是否确认
+				</th>
+				<th data-field="examPlace"
+				    data-switchable="false">考点
+				</th>
+				<th data-field="examGroup"
+				    data-switchable="false">组号
+				</th>
+				<th data-field="examNumber"
+				    data-switchable="false">考号
+				</th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+
+	<!--modal-->
+	<div class="modal" id="mymodal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span
+							aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p>...</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-filter-control.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="../lib/tableExport.js"></script>
+<script src="./build/queryStudent.bundle.js"></script>
+<script>
+
+	var requestPath = window.config.requestPath;
+	function detailFormatter(index, row) {
+		var html = [];
+		var title = {
+			name: '姓名',
+			gender: '性别',
+			age: '性别',
+			examType: '专业',
+			subject: '科目',
+			ticket: '准考证',
+			province: '生源省',
+			region: '生源市',
+			highSchool: '毕业高中',
+			personalId: '身份证',
+			telephone: '手机',
+			email: '电子邮件',
+			address: '地址',
+			hasConfirmed: '是否确认',
+			hasVerified: '是否审核',
+			examPlace: '考点',
+			examGroup: '考场/组号',
+			examNumber: '考号'
+		};
+		$.each(row, function (key, value) {
+			if (value) {//如果值有意义才显示
+				html.push('<p><b>' + title[key] + ':</b> ' + value + '</p>');
+			}
+		});
+		return html.join('');
+	}
+	function confirmFormatter(value) {
+		return value ? '<button class="btn confirmed" disabled>已确认<span style="color: #ddd;">/true</span></button>' :
+				'<button class="btn btn-primary confirm">未确认<span style="color: #428bca;">/false</span></button>';
+	}
+	window.confirmEvent = {
+		'click .confirm': function (e, value, row, index) {
+			if (row.hasVerified != 'yes'){
+				$('.modal-body p').html('未审核通过不能确认');
+				$("#mymodal").modal("toggle");
+				return;
+			}
+
+			$(e.target).attr('disabled', true);//disable button
+
+			$('.modal-body p').html('确认中');
+			$("#mymodal").modal("toggle");
+
+			var ticket = row.ticket;//准考证
+
+			//跟后端交互，获得考号组号
+			$.ajax({
+				url: requestPath + 'studentConfirm' + '?ticket=' + ticket,
+				success: function (res) {
+					if (res.error_code == 2000) {
+						var data = res.goods;
+						var examGroup = data.examGroup;
+						var examNumber = data.examNumber;
+						console.log(row.name + '确认成功');
+
+						//弹窗显示“已确认，name考号和组号是”
+						//alert();
+						$('.modal-body p').html(row.name + '已确认成功！<br/>' +
+						'你的组号是：' + examGroup + '<br/>' +
+						'你的考号是：' + examNumber);
+
+						//update row
+						row.hasConfirmed = true;
+						row.examGroup = examGroup;
+						row.examNumber = examNumber;
+						$('#table').bootstrapTable('updateRow', {
+							index: index,
+							row: row
+						});
+					}
+				},
+				error: function () {
+					$(e.target).attr('disabled', false);
+//					alert('确认失败，请稍后再试');
+					$('.modal-body p').html('确认失败，请稍后再试');
+					return;
+				}
+			});
+		},
+		'click .confirmed': function (e, value, row) {
+			return;
+		}
+	};
+	function verifiedFormatter(value) {//未审核（'notYet'），审核通过（'yes'），审核未通过（'no'）
+		if (value == 'notYet') {
+			return '<button class="btn btn-primary verify to-verify-yes glyphicon glyphicon-ok-circle"></button>' +
+					'<button class="btn verify to-verify-no glyphicon glyphicon-remove-circle"></button>' +
+					'<span style="color:#fff" >notYet</span>';
+		} else if (value == 'yes') {
+			return '<button class="btn btn-success verified verified-yes glyphicon glyphicon-ok-sign" disabled="disabled"><span style="color: #5cb85c;">yes</span></button>';
+		} else {//value == 'no'
+			return '<button class="btn verified verified-no glyphicon glyphicon-remove-sign"  disabled="disabled"><span style="color: #ddd;">no</span></button>';
+		}
+	}
+	window.verifiedEvent = {
+		'click .verify': function (e, value, row, index) {
+			$(e.target).attr('disabled', true);//disable button
+
+			$('.modal-body p').html('提交审核中');
+			$("#mymodal").modal("toggle");
+
+			var ticket = row.ticket;//准考证
+			var vValue = e.target.classList.contains('to-verify-yes') ? 'yes' : 'no';
+
+			//跟后端交互，获得考号组号
+			$.ajax({
+				url: requestPath + 'studentVerify' + '?ticket=' + ticket + '&value=' + vValue,
+				success: function (res) {
+					if (res.error_code == 2000) {
+						console.log(row.name + '审核');
+
+						//弹窗显示“审核成功”
+						//alert();
+						$('.modal-body p').html(row.name + '已审核成功！<br/>');
+
+						//update row
+						row.hasVerified = vValue;
+						$('#table').bootstrapTable('updateRow', {
+							index: index,
+							row: row
+						});
+					}
+				},
+				error: function () {
+					$(e.target).attr('disabled', false);
+//					alert('确认失败，请稍后再试');
+					$('.modal-body p').html('审核提交失败，请稍后再试');
+					return;
+				}
+			});
+		},
+		'click .verified': function (e, value, row) {
+			return;
+		}
+	};
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生考试应用欢迎页面</title>
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+    <style>
+        body{
+        }
+        .container-fluid{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("./images/studentBg.jpeg") 0 0 no-repeat;
+            background-size: cover;
+            font-family: "Microsoft YaHei UI";
+        }
+        .login-wrap{
+            position: relative;
+            top: 20%;
+            width: 80%;
+            margin-left: 10%;
+            overflow: hidden;
+            background: rgba(255,255,255,0.6);
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="well login-wrap">
+        <form class="form-horizontal">
+            <h1 align="center">欢迎进入复试</h1>
+            <br/>
+            <div class="form-group">
+            <div class="col-lg-4 col-lg-offset-4">
+                <select class="form-control" name="examType" id="examType" data-bv-notempty
+                        data-bv-notempty-message="请选择考试类型">
+                    <option value="">-- 选择考试类型 --</option>
+                    <option value="推荐生">推荐生</option>
+                    <option value="艺术特长生">艺术特长生</option>
+                    <option value="高水平运动员">高水平运动员</option>
+                    <option value="插班生">插班生</option>
+                    <option value="音乐生">音乐生</option>
+                    <option value="美术生">美术生</option>
+                    <option value="播音与主持艺术生">播音与主持艺术生</option>
+                </select>
+            </div>
+            </div>
+            <br/>
+            <div class="form-group">
+                <div class="col-lg-2 col-lg-offset-5">
+                    <button type="button" class="btn btn-primary" id="bnt">开始考试</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <!--modal-->
+    <div class="modal fade" id="mymodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">复试考卷</h4>
+                </div>
+                <div class="modal-body">
+                    <p>载入中</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="next-question" class="btn btn-primary">下一题</button>
+                    <button type="button" class="btn btn-primary" id="modal-ok" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="./build/padStudent.bundle.js"></script>
+</body>
+</html>

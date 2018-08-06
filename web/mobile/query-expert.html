@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>自主招生</title>
+	<link rel="stylesheet" href="../lib/bootstrap.min.css">
+	<link rel="stylesheet" href="../lib/bootstrap-table/bootstrap-table.css">
+	<style>
+
+	</style>
+</head>
+<body>
+<div class="container">
+	<div class="header" style="margin-top: 10px;">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				   aria-expanded="false">
+					学生报名 <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li role="presentation"><a href="./personal-enroll.html">个人报名</a></li>
+					<li role="presentation"><a href="./group-enroll.html">集体报名</a></li>
+				</ul>
+			</li>
+			<li role="presentation"><a href="./confirm.html">现场确认</a></li>
+			<li role="presentation" class="dropdown active">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				   aria-expanded="false">
+					信息查询 <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li role="presentation"><a href="./query-student.html">学生信息</a></li>
+					<li role="presentation" class="active"><a href="javascript:;">专家信息</a></li>
+					<li role="presentation"><a href="./query-grade.html">成绩信息</a></li>
+				</ul>
+			</li>
+			<li role="presentation"><a href="./password.html">专家密码</a></li>
+		</ul>
+	</div>
+	<div class="content" style="margin-top: 20px">
+		<h1>专家信息
+			<!--<button class="btn-primary btn arrange-experts">为专家分配考场</button>-->
+		</h1>
+		<table id="table"
+		       data-url="./data/experts.json"
+		       data-search="true"
+		       data-toggle="table"
+		       data-show-export="true"
+		       data-pagination="true"
+		       data-show-columns="false"
+		       data-detail-view="false"
+		       data-detail-formatter="detailFormatter"
+		       data-click-to-select="false"
+		       data-filter-control="true">
+			<thead>
+			<tr>
+				<!--<th data-field="state"
+				    data-checkbox="true">
+				</th>-->
+				<th data-field="expertId"
+				    data-switchable="false">专家id
+				</th>
+				<th data-field="expertName"
+				    data-switchable="false">姓名
+				</th>
+				<th data-field="major"
+				    data-switchable="false"
+				    data-filter-control="select">专业（报考类型）
+				</th>
+				<th data-field="subject"
+				    data-switchable="false">科目
+				</th>
+				<th data-field="examPlace"
+				    data-switchable="false"
+				    data-filter-control="select">考点
+				</th>
+				<th data-field="examGroup"
+				    data-switchable="false">考场/组号
+				</th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+
+
+	<!--modal-->
+	<div class="modal" id="mymodal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span
+							aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p>...</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-filter-control.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="../lib/tableExport.js"></script>
+<script src="./build/queryExpert.bundle.js"></script>
+<script>
+
+	function detailFormatter(index, row) {
+		var html = [];
+		$.each(row, function (key, value) {
+			if (value) {//如果值有意义才显示
+				html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+			}
+		});
+		return html.join('');
+	}
+//	$('.arrange-experts').click(function (e) {
+//
+//		$(e.target).attr('disabled', true);//disable button
+//		//获取所有新数据
+//
+//		$.ajax({
+//			url: requestPath + 'arrangeExperts',
+//			success: function (res) {
+//				if (res.error_code == 2000) {
+//					let data = res.goods;
+//					$table.bootstrapTable('load', data);
+//				}
+//			},
+//			error: function (e) {
+//				$(e.target).attr('disabled', false);
+//				alert('获取失败，请稍后再试');
+//				return;
+//			}
+//		});
+//	});
+</script>
+</body>
+</html>

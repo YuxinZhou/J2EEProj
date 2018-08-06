@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>自主招生-专家评分</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="../lib/bootstrap.min.css">
+	<link rel="stylesheet" href="../lib/bootstrap-table/bootstrap-table.min.css">
+	<style>
+		body{
+			font-family: "Microsoft YaHei UI";
+		}
+	</style>
+</head>
+<body>
+<div class="container-fluid">
+	<table id="table"
+	       data-url=""
+	       data-search="true"
+	       data-toggle="table"
+	       data-show-export="false"
+	       data-pagination="true"
+	       data-show-columns="false"
+	       data-detail-view="false"
+	       data-detail-formatter="detailFormatter"
+	       data-click-to-select="false"
+	       data-unique-id="id"
+	       data-filter-control="true">
+		<thead>
+		<tr>
+			<th data-field="id">考号/作品号
+			</th>
+			<th data-field="firstGrade"
+			    data-editable="true">印象分
+			</th>
+			<th data-field="finalGrade"
+			    data-editable="true"
+			    data-visible="false">最终分
+			</th>
+		</tr>
+		</thead>
+	</table>
+	<button class="btn btn-default" id="back-to-admin">返回设置</button>
+
+	<!--modal-->
+	<div class="modal" id="mymodal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span
+							aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="modal-cancel" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="modal-ok" data-dismiss="modal">确认</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-filter-control.min.js"></script>
+<script src="../lib/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="../lib/bootstrap-editable.js"></script>
+<script src="./build/score.bundle.js"></script>
+<script>
+
+	$(document).ready(function () {
+
+		//每次都上传
+
+		var requestPath = window.config.requestPath;
+		var exam = window.localStorage.exam ? JSON.parse(window.localStorage.exam) : {};
+		var scoreSetting = localStorage.score ? JSON.parse(localStorage.score) : {};
+		console.log(exam, scoreSetting);
+		var maxScore = 0;
+		var state = 1;//first state ;2:finalState
+		$('#table').on('click', '[type="submit"]', function (e) {
+			e.stopPropagation();
+
+			var id = $(this).closest('tr').data('uniqueid');
+			var index = $(this).closest('tr').data('index');
+			var grade = $(this).parent().siblings().children('input').val();
+			var gradeType = state === 1 ? 'firstGrade' : 'finalGrade';
+
+			doScore(id, index, gradeType, grade);
+		});
+
+		function doScore(id, index, gradeType, grade) {
+			$('.modal-body p').html('您为id为' + id + '的考生打分为' + grade);
+			$('#mymodal').modal('toggle');
+			$('#modal-cancel').click(function () {
+				$('#mymodal').modal('toggle');
+				$('[data-index=\"' + index + '\"]').find('[data-name=\"' + gradeType + '\"]').html(getExam(id, gradeType) || 0);
+			});
+			$('#modal-ok').click(function () {
+
+				if (!checkScore(grade)) {//checkScore = false;发送警报
+					$.ajax({
+						type: 'get',
+						async: false,
+						url: requestPath + 'pad/warn?examGroup=' + exam.examGroup,
+						success: function (res) {
+							var code = res.error_code;
+							if (code == 2001) {
+								//累计一次提示
+								alert('违规1次');
+							} else if (code == 2002) {
+								//累计到两次提示，不允许继续考试
+								alert('违规2次,停止打分');
+								window.location.href = './login-admin.html';
+							}
+						},
+						error: function () {
+							//do nothing
+							console.log('违规');
+						}
+					});
+				}
+
+				//获取服务器需要的数据
+				var score = {
+					"examId": exam.examId,
+					"examNumber": id,
+					"subject": exam.subject || '',
+					"gradeType": gradeType,
+					"grade": grade,
+					"expertId": exam.expertId || '',
+					"uploadTime": new Date()
+				};
+				//上传至服务器，根据状态设定isUpload = true|false
+				$.ajax({
+					type: "post",
+					async: false,
+					url: requestPath + 'pad/uploadOneGrade',
+					data: JSON.stringify(score),
+					success: function () {
+						//更新locastorage中的数据,
+						gradeType === 'firstGrade' ?
+								setExam(id, {
+									"firstGrade": grade,
+									"isUpload": true
+								}) :
+								setExam(id, {
+									"finalGrade": grade,
+									"isUpload": true
+								});
+						console.log('上传成功');
+					},
+					error: function () {
+						//更新locastorage中的数据
+						gradeType == 'firstGrade' ?
+								setExam(id, {
+									"firstGrade": grade,
+									"isUpload": false
+								}) :
+								setExam(id, {
+									"finalGrade": grade,
+									"isUpload": false
+								});
+						console.log('上传失败');
+					}
+				});
+
+				//如果填完了全部的印象分
+				if (finishedGrade(gradeType)) {
+					if (gradeType == 'firstGrade') {
+						console.log('印象分评分完毕，开始最终分评分。');
+						$('#table').bootstrapTable('showColumn', 'finalGrade').bootstrapTable('hideColumn', 'firstGrade');
+						state = 2;
+					} else {
+						alert('评分完成,请返回管理员界面');
+						//保存数据到本地
+						console.log('完成', exam);
+						window.localStorage.exam = JSON.stringify(exam);
+						setTimeout(function () {
+							window.location.href = './login-admin.html';
+						}, 3000)
+					}
+				}
+			});
+		}
+
+		function finishedGrade(option) {
+			var flag = true;
+			var stus = exam.students;
+			for (var i = 0; i < stus.length; i++) {
+				if (stus[i][option] == 0) {
+					flag = false;
+					break;
+				}
+			}
+			return flag;
+		}
+
+		function checkScore(score) {//没问题则true,违规则false
+			var flag = (score >= scoreSetting.scoreMin &&
+			score <= scoreSetting.scoreMax &&
+			(Math.abs(maxScore - score) <= scoreSetting.scoreDiff || maxScore == 0));
+			maxScore = Math.max(score, maxScore);
+			return flag;
+		}
+
+		function setExam(id, option) {
+			exam.students.forEach(function (item) {
+				if (item.id == id) {
+					for (var i in option) {
+						item[i] = option[i];
+					}
+					return;
+				}
+			})
+
+		}
+
+		function getExam(id, option) {
+			var value;
+			exam.students.forEach(function (item) {
+				if (item.id == id) {
+					value = item[option];
+					return;
+				}
+			});
+			return value;
+		}
+
+
+	});
+
+</script>
+</body>
+</html>

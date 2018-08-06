@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>自主招生</title>
+	<link rel="stylesheet" href="../lib/bootstrap.min.css"/>
+	<link rel="stylesheet" href="../lib/bootstrapValidator.min.css"/>
+	<style>
+
+	</style>
+</head>
+<body>
+<div class="container">
+	<div class="header" style="margin-top: 10px;">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="dropdown active">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				   aria-expanded="false">
+					学生报名 <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li role="presentation" class="active"><a href="javascript:;">个人报名</a></li>
+					<li role="presentation"><a href="./group-enroll.html">集体报名</a></li>
+				</ul>
+			</li>
+			<li role="presentation"><a href="./confirm.html">现场确认</a></li>
+			<li role="presentation" class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+				   aria-expanded="false">
+					信息查询 <span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li role="presentation"><a href="./query-student.html">学生信息</a></li>
+					<li role="presentation"><a href="./query-expert.html">专家信息</a></li>
+					<li role="presentation"><a href="query-grade.html">成绩信息</a></li>
+				</ul>
+			</li>
+			<li role="presentation"><a href="./password.html">专家密码</a></li>
+		</ul>
+	</div>
+<!--	<div class="content" style="margin-top: 20px">
+		&lt;!&ndash;现场报名单人报名表格&ndash;&gt;
+		<form id="info" class="form-horizontal"
+		      data-bv-message="This value is not valid"
+		      data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+		      data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+		      data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+			&lt;!&ndash;学生姓名&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label">学生姓名</label>
+
+				<div class="col-lg-5">
+					<input type="text" class="form-control" name="name" id="name"
+					       placeholder="请输入学生姓名"
+					       data-bv-message="The username is not valid"
+					       required data-bv-notempty-message="学生姓名不能为空"
+					       pattern="^[\u4e00-\u9fa5]+$"
+					       data-bv-regexp-message="姓名只能是中文"
+					       data-bv-stringlength="true"
+					       data-bv-stringlength-min="2"
+					       data-bv-stringlength-max="30"
+					       data-bv-stringlength-message="姓名长度要在2-30之间"/>
+				</div>
+			</div>
+			&lt;!&ndash;学生性别&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label">学生性别</label>
+
+				<div class="col-lg-5">
+					<div class="radio">
+						<label>
+							<input type="radio" name="gender" value="男" required
+							       data-bv-notempty-message="需要选择性别"/> 男
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							<input type="radio" name="gender" value="女"/> 女
+						</label>
+					</div>
+				</div>
+			</div>
+			&lt;!&ndash;学生年龄&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label">学生年龄</label>
+
+				<div class="col-lg-5">
+					<input type="text" class="form-control" name="age" id="age" required
+					       placeholder="请输入学生年龄"
+					       pattern="^[0-9]+$"
+					       data-bv-regexp-message="年龄只能是数字"
+					       data-bv-stringlength="true"
+					       data-bv-stringlength-min="2"
+					       data-bv-stringlength-max="2"
+					       data-bv-stringlength-message="年龄只能是两位数"/>
+				</div>
+			</div>
+			&lt;!&ndash;考试类型&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label" for="examType">考试类型</label>
+
+				<div class="col-lg-5">
+					<select class="form-control" name="examType" id="examType" data-bv-notempty
+					        data-bv-notempty-message="请选择考试类型">
+						<option value="">&#45;&#45; 选择考试类型 &#45;&#45;</option>
+						<option value="推荐生">推荐生</option>
+						<option value="艺术特长生">艺术特长生</option>
+						<option value="高水平运动员">高水平运动员</option>
+						<option value="插班生">插班生</option>
+						<option value="音乐生">音乐生</option>
+						<option value="美术生">美术生</option>
+						<option value="播音与主持艺术生">播音与主持艺术生</option>
+					</select>
+				</div>
+			</div>
+
+			&lt;!&ndash;生源地&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label">学生生源地</label>
+
+				<div class="col-lg-2">
+					<input type="text" class="form-control" name="province" id="provice" placeholder="省" required
+					       data-bv-notempty-message="省不能为空"
+					       pattern="^[\u4e00-\u9fa5]+$"
+					       data-bv-regexp-message="请填写中文"
+							/>
+				</div>
+				<div class="col-lg-3">
+					<input type="text" class="form-control" name="region" id="region" placeholder="市" required
+					       data-bv-notempty-message="市不能为空"
+					       pattern="^[\u4e00-\u9fa5]+$"
+					       data-bv-regexp-message="请填写中文"/>
+				</div>
+			</div>
+			&lt;!&ndash;毕业高中&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label">毕业高中</label>
+
+				<div class="col-lg-5">
+					<input type="text" class="form-control" name="highSchool" id="highSchool"
+					       placeholder="请输入毕业高中"
+					       required data-bv-notempty-message="毕业高中不能为空"
+							/>
+				</div>
+			</div>
+			&lt;!&ndash;身份证&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label" for="personalId">身份证号</label>
+
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="personalId" id="personalId" required
+					       placeholder="请输入身份证号"
+					       pattern="^[X-Y0-9]+$"
+					       data-bv-regexp-message="身份证号只能由数字或X,Y组成"
+					       data-bv-stringlength="true"
+					       data-bv-stringlength-min="18"
+					       data-bv-stringlength-max="18"
+					       data-bv-stringlength-message="身份只能是18位数"
+							/>
+				</div>
+			</div>
+			&lt;!&ndash;手机号码&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label" for="telephone">手机号码</label>
+
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="telephone" id="telephone" required
+					       placeholder="请输入手机号码"
+					       pattern="^[0-9]+$" data-bv-regexp-message="手机号码只能是数字"
+					       data-bv-stringlength="true"
+					       data-bv-stringlength-min="11"
+					       data-bv-stringlength-max="11"
+					       data-bv-stringlength-message="手机号码只能是11位数"/>
+				</div>
+			</div>
+			&lt;!&ndash;email&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label">Email</label>
+
+				<div class="col-lg-5">
+					<input class="form-control" name="email" id="email" type="email" required
+					       placeholder="请输入Email"
+					       data-bv-emailaddress-message="Email输入格式不正确"/>
+				</div>
+			</div>
+			&lt;!&ndash;学生地址&ndash;&gt;
+			<div class="form-group">
+				<label class="col-lg-3 control-label" for="address">学生地址</label>
+
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="address" id="address"
+					       placeholder="请输入地址"
+					       required data-bv-notempty-message="地址不能为空"/>
+				</div>
+			</div>
+			&lt;!&ndash;提交button&ndash;&gt;
+			<div class="form-group">
+				<div class="col-lg-9 col-lg-offset-3">
+					<button type="submit" class="btn btn-primary" id="sub-bnt">提交信息</button>
+				</div>
+			</div>
+		</form>
+	</div>-->
+	<div class="content" style="margin-top: 20px">
+		<form id="personalEnrollForm" class="form-horizontal">
+			<div class="form-group">
+				<label class="col-lg-3 control-label">个人报名：</label>
+				<div class="col-lg-4">
+					<input type="file" class="form-control" name="name" id="name"/>
+				</div>
+			</div>
+			<div class="col-lg-4 col-lg-offset-3 input-error alert alert-danger hide" role="alert"></div>
+
+			<div class="form-group">
+				<div class="col-lg-9 col-lg-offset-3">
+					<button type="button" class="btn btn-primary" id="sub-btn">提交信息</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--modal-->
+	<div class="modal" id="mymodal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span
+							aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p>...</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+
+<script src="../lib/jquery-2.1.3.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/bootstrapValidator.js"></script>
+<script src="./build/personalEnroll.bundle.js"></script>
+</body>
+</html>

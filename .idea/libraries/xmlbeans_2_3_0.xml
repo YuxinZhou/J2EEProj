@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="xmlbeans-2.3.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/xmlbeans-2.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/poi-ooxml-schemas-3.8-20120326.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/poi-ooxml-3.8-20120326.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/poi-3.8-20120326.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/dom4j-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-io-2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-fileupload-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/com.springsource.org.apache.commons.fileupload-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/catalina-manager.jar!/" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
